@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   win32: ^2.4.1
-  ffi: ^1.1.0
+  ffi: ^2.0.1
   esc_pos_utils:
     git:
       url: https://gitee.com/fanchou/esc_pos_utils.git
