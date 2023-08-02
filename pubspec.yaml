@@ -4,20 +4,18 @@ version: 0.1.5
 homepage:
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
   win32: ^2.4.1
-  ffi: ^2.0.1
+  ffi: ^1.1.0
   esc_pos_utils:
     git:
       url: https://gitee.com/fanchou/esc_pos_utils.git
-  quick_usb: 
-    git:
-      https://github.com/lesany/quick_usb.git
+  quick_usb: 0.4.0
   # flutter_libserialport: ^0.2.2
 
 dev_dependencies:
