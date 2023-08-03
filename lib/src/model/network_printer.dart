@@ -9,15 +9,15 @@ import '../enums/connection_type.dart';
 
 class NetworkPrinter extends POSPrinter {
   NetworkPrinter({
-    String name,
-    String address,
-    int port,
+    String? name,
+    String? address,
+    int? port,
     bool connected: false,
     int type: 1,
-    ConnectionType connectionType,
+    ConnectionType? connectionType,
   }) {
-    this.name = name;
-    this.address = address;
+    this.name = name!;
+    this.address = address!;
     this.connected = connected;
     this.type = type;
     this.connectionType = ConnectionType.network;

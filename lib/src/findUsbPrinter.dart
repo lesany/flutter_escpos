@@ -21,35 +21,35 @@ class FindUsbPrinter {
         _readRawBuff();
         yield* parse();
       } finally {
-        free(_rawBuffer);
+        free(_rawBuffer!);
       }
     } finally {
-      free(_pBuffSize);
-      free(_bPrinterLen);
+      free(_pBuffSize!);
+      free(_bPrinterLen!);
     }
   }
 
-  Pointer<DWORD> _pBuffSize;
-  Pointer<DWORD> _bPrinterLen;
+  Pointer<DWORD>? _pBuffSize;
+  Pointer<DWORD>? _bPrinterLen;
 
   void _getBufferSize() {
     _pBuffSize = calloc<DWORD>();
     _bPrinterLen = calloc<DWORD>();
 
-    EnumPrinters(_flags, nullptr, 2, nullptr, 0, _pBuffSize, _bPrinterLen);
+    EnumPrinters(_flags, nullptr, 2, nullptr, 0, _pBuffSize!, _bPrinterLen!);
 
-    if (_pBuffSize.value == 0) {
+    if (_pBuffSize!.value == 0) {
       throw 'Read printer buffer size fail';
     }
   }
 
-  Pointer<BYTE> _rawBuffer;
+  Pointer<BYTE>? _rawBuffer;
 
   void _readRawBuff() {
-    _rawBuffer = malloc.allocate<BYTE>(_pBuffSize.value);
+    _rawBuffer = malloc.allocate<BYTE>(_pBuffSize!.value);
 
-    final isRawBuffFail = EnumPrinters(_flags, nullptr, 2, _rawBuffer,
-        _pBuffSize.value, _pBuffSize, _bPrinterLen) ==
+    final isRawBuffFail = EnumPrinters(_flags, nullptr, 2, _rawBuffer!,
+        _pBuffSize!.value, _pBuffSize!, _bPrinterLen!) ==
         0;
 
     if (isRawBuffFail) {
@@ -58,8 +58,8 @@ class FindUsbPrinter {
   }
 
   Iterable<String> parse() sync* {
-    for (var i = 0; i < _bPrinterLen.value; i++) {
-      final printer = _rawBuffer.cast<PRINTER_INFO_2>().elementAt(i);
+    for (var i = 0; i < _bPrinterLen!.value; i++) {
+      final printer = _rawBuffer!.cast<PRINTER_INFO_2>().elementAt(i);
       yield printer.ref.pPrinterName.toDartString();
     }
   }

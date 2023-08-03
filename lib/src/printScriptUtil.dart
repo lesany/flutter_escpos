@@ -12,8 +12,8 @@ class PrintScriptUtil {
   final PaperSize paperSize;
   final CapabilityProfile profile;
 
-  List<int> _bytes;
-  Generator _generator;
+  List<int>? _bytes;
+  Generator? _generator;
 
   PrintScriptUtil(this.paperSize, this.profile, {int spaceBetweenRows = 5}) {
     _bytes = [];
@@ -21,11 +21,11 @@ class PrintScriptUtil {
         Generator(paperSize, profile, spaceBetweenRows: spaceBetweenRows);
   }
 
-  List<int> get bytes => _bytes;
+  List<int>? get bytes => _bytes;
 
   PrintScriptUtil reset() {
     _bytes = []; // reset data;
-    _bytes += _generator.reset();
+    _bytes = _bytes!+_generator!.reset();
     return this;
   }
 
@@ -33,8 +33,8 @@ class PrintScriptUtil {
       {PosStyles styles = const PosStyles(),
       int linesAfter = 0,
       bool containsChinese = false,
-      int maxCharsPerLine}) {
-    _bytes += _generator.text(text,
+      int? maxCharsPerLine}) {
+    _bytes =_bytes!+ _generator!.text(text,
         styles: styles,
         linesAfter: linesAfter,
         containsChinese: containsChinese,
@@ -43,63 +43,63 @@ class PrintScriptUtil {
   }
 
   PrintScriptUtil setGlobalCodeTable(String codeTable) {
-    _bytes += _generator.setGlobalCodeTable(codeTable);
+    _bytes =_bytes!+ _generator!.setGlobalCodeTable(codeTable);
     return this;
   }
 
-  PrintScriptUtil setGlobalFont(PosFontType font, {int maxCharsPerLine}) {
-    _bytes += _generator.setGlobalFont(font, maxCharsPerLine: maxCharsPerLine);
+  PrintScriptUtil setGlobalFont(PosFontType font, {int? maxCharsPerLine}) {
+    _bytes =_bytes!+ _generator!.setGlobalFont(font, maxCharsPerLine: maxCharsPerLine);
     return this;
   }
 
   PrintScriptUtil setStyles(PosStyles styles, {bool isKanji = false}) {
-    _bytes += _generator.setStyles(styles, isKanji: isKanji);
+    _bytes =_bytes!+ _generator!.setStyles(styles, isKanji: isKanji);
     return this;
   }
 
   PrintScriptUtil rawBytes(List<int> cmd, {bool isKanji = false}) {
-    _bytes += _generator.rawBytes(cmd, isKanji: isKanji);
+    _bytes =_bytes!+_generator!.rawBytes(cmd, isKanji: isKanji);
     return this;
   }
 
   PrintScriptUtil emptyLines(int n) {
-    _bytes += _generator.emptyLines(n);
+    _bytes =_bytes!+ _generator!.emptyLines(n);
     return this;
   }
 
   PrintScriptUtil feed(int n) {
-    _bytes += _generator.feed(n);
+    _bytes =_bytes!+ _generator!.feed(n);
     return this;
   }
 
   PrintScriptUtil cut({PosCutMode mode = PosCutMode.full}) {
-    _bytes += _generator.cut(mode: mode);
+    _bytes =_bytes!+ _generator!.cut(mode: mode);
     return this;
   }
 
-  PrintScriptUtil printCodeTable({String codeTable}) {
-    _bytes += _generator.printCodeTable(codeTable: codeTable);
+  PrintScriptUtil printCodeTable({String? codeTable}) {
+    _bytes =_bytes!+_generator!.printCodeTable(codeTable: codeTable);
     return this;
   }
 
   PrintScriptUtil beep(
       {int n = 3, PosBeepDuration duration = PosBeepDuration.beep450ms}) {
-    _bytes += _generator.beep(n: n, duration: duration);
+    _bytes =_bytes!+ _generator!.beep(n: n, duration: duration);
     return this;
   }
 
   PrintScriptUtil reverseFeed(int n) {
-    _bytes += _generator.reverseFeed(n);
+    _bytes =_bytes!+ _generator!.reverseFeed(n);
     return this;
   }
 
   PrintScriptUtil row(List<PosColumn> cols) {
-    _bytes += _generator.row(cols);
+    _bytes =_bytes!+ _generator!.row(cols);
     return this;
   }
 
   PrintScriptUtil image(Image imgSrc, {PosAlign align = PosAlign.center}) {
-    _bytes += _generator.image(imgSrc, align: align);
+    _bytes =_bytes!+_generator!.image(imgSrc, align: align);
     return this;
   }
 
@@ -110,7 +110,7 @@ class PrintScriptUtil {
     bool highDensityVertical = true,
     PosImageFn imageFn = PosImageFn.bitImageRaster,
   }) {
-    _bytes += _generator.imageRaster(
+    _bytes =_bytes!+ _generator!.imageRaster(
       image,
       align: align,
       highDensityHorizontal: highDensityHorizontal,
@@ -122,13 +122,13 @@ class PrintScriptUtil {
 
   PrintScriptUtil barcode(
     Barcode barcode, {
-    int width,
-    int height,
-    BarcodeFont font,
+    int? width,
+    int? height,
+    BarcodeFont? font,
     BarcodeText textPos = BarcodeText.below,
     PosAlign align = PosAlign.center,
   }) {
-    _bytes += _generator.barcode(
+    _bytes =_bytes!+ _generator!.barcode(
       barcode,
       width: width,
       height: height,
@@ -145,17 +145,17 @@ class PrintScriptUtil {
     QRSize size = QRSize.Size4,
     QRCorrection cor = QRCorrection.L,
   }) {
-    _bytes += _generator.qrcode(text, align: align, size: size, cor: cor);
+    _bytes =_bytes!+_generator!.qrcode(text, align: align, size: size, cor: cor);
     return this;
   }
 
   PrintScriptUtil drawer({PosDrawer pin = PosDrawer.pin2}) {
-    _bytes += _generator.drawer(pin: pin);
+    _bytes =_bytes!+ _generator!.drawer(pin: pin);
     return this;
   }
 
-  PrintScriptUtil hr({String ch = '-', int len, int linesAfter = 0}) {
-    _bytes += _generator.hr(ch: ch, linesAfter: linesAfter);
+  PrintScriptUtil hr({String ch = '-', int? len, int linesAfter = 0}) {
+    _bytes =_bytes!+ _generator!.hr(ch: ch, linesAfter: linesAfter);
     return this;
   }
 
@@ -163,9 +163,9 @@ class PrintScriptUtil {
     Uint8List textBytes, {
     PosStyles styles = const PosStyles(),
     int linesAfter = 0,
-    int maxCharsPerLine,
+    int? maxCharsPerLine,
   }) {
-    _bytes += _generator.textEncoded(
+    _bytes =_bytes!+ _generator!.textEncoded(
       textBytes,
       styles: styles,
       linesAfter: linesAfter,

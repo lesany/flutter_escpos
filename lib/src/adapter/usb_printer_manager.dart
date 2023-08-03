@@ -15,14 +15,12 @@ import '../model/usb_printer.dart';
 /// Date: 2022/3/13 15:42
 /// Description:
 
-
 class USBPrinterManager extends PrinterManager {
-
-  static UsbEndpoint _endpoint;
-  POSPrinter _printer;
+  static UsbEndpoint? _endpoint;
+  POSPrinter? _printer;
 
   static USBPrinterManager get instance => _getInstance();
-  static USBPrinterManager _instance;
+  static USBPrinterManager? _instance;
 
   USBPrinterManager._internal() {
     _init();
@@ -32,7 +30,7 @@ class USBPrinterManager extends PrinterManager {
     if (_instance == null) {
       _instance = USBPrinterManager._internal();
     }
-    return _instance;
+    return _instance!;
   }
 
   factory USBPrinterManager() => _getInstance();
@@ -54,9 +52,10 @@ class USBPrinterManager extends PrinterManager {
   // int dwCount;
 
   @override
-  Future<ConnectionResponse> connect(POSPrinter printer,{Duration timeout: const Duration(seconds: 5)}) async{
+  Future<ConnectionResponse> connect(POSPrinter printer,
+      {Duration timeout: const Duration(seconds: 5)}) async {
     _printer = printer;
-    if(Platform.isWindows){
+    if (Platform.isWindows) {
       // try {
       //   docInfo = calloc<DOC_INFO_1>()
       //     ..ref.pDocName = pDocName
@@ -77,18 +76,22 @@ class USBPrinterManager extends PrinterManager {
       //   this.isConnected = false;
       //   return Future<ConnectionResponse>.value(ConnectionResponse.timeout);
       // }
-    }else{
+      return Future<ConnectionResponse>.value(ConnectionResponse.timeout);
+    } else {
       bool openDevice = false;
       try {
         // reGetDevicesWithDescription
-        List<UsbDeviceDescription> deviceList = await getDevicesWithDescription();
-        UsbDevice device = deviceList.firstWhere((element) =>
-        element.device.vendorId == printer.vendorId &&
-            element.device.productId == printer.productId).device;
+        List<UsbDeviceDescription> deviceList =
+            await getDevicesWithDescription();
+        UsbDevice device = deviceList
+            .firstWhere((element) =>
+                element.device.vendorId == printer.vendorId &&
+                element.device.productId == printer.productId)
+            .device;
 
-        if(Platform.isAndroid){
+        if (Platform.isAndroid) {
           bool hasPermission = await QuickUsb.hasPermission(device);
-          if(!hasPermission){
+          if (!hasPermission) {
             await QuickUsb.requestPermission(device);
           }
         }
@@ -103,7 +106,7 @@ class USBPrinterManager extends PrinterManager {
         _endpoint = _configuration.interfaces[0].endpoints
             .firstWhere((e) => e.direction == UsbEndpoint.DIRECTION_OUT);
         var claimInterface =
-        await QuickUsb.claimInterface(_configuration.interfaces[0]);
+            await QuickUsb.claimInterface(_configuration.interfaces[0]);
         print('claimInterface $claimInterface');
         this.isConnected = true;
         // this.printer.connected = true;
@@ -120,21 +123,21 @@ class USBPrinterManager extends PrinterManager {
   // 获取打印机
   Future<List<USBPrinter>> discover() async {
     List<USBPrinter> posPrinter = [];
-    if(Platform.isWindows){
+    if (Platform.isWindows) {
       final winPrinter = FindUsbPrinter(PRINTER_ENUM_LOCAL);
       final printerNames = await winPrinter.getPrinterLists();
       printerNames.forEach((item) {
         posPrinter.add(USBPrinter(name: item));
       });
-    }else{
-      List<UsbDeviceDescription> usbPrinter = await QuickUsb.getDevicesWithDescription();
+    } else {
+      List<UsbDeviceDescription> usbPrinter =
+          await QuickUsb.getDevicesWithDescription();
       usbPrinter.forEach((element) {
         posPrinter.add(USBPrinter(
             id: element.serialNumber,
             name: element.product,
             vendorId: element.device.vendorId,
-            productId: element.device.productId
-        ));
+            productId: element.device.productId));
       });
     }
     return posPrinter;
@@ -142,18 +145,17 @@ class USBPrinterManager extends PrinterManager {
 
   /// getDevicesWithDescription
   static Future<List<UsbDeviceDescription>> getDevicesWithDescription() async {
-    List<UsbDeviceDescription> _usbList;
+    List<UsbDeviceDescription>? _usbList;
     try {
       _usbList = await QuickUsb.getDevicesWithDescription();
     } catch (e) {
       print("getDevicesWithDescription error: + $e");
     }
-    return _usbList;
+    return _usbList!;
   }
 
-
   @override
-  Future<ConnectionResponse> disconnect({Duration timeout}) async{
+  Future<ConnectionResponse> disconnect({Duration? timeout}) async {
     if (Platform.isWindows) {
       this.isConnected = false;
       if (timeout != null) {
@@ -172,9 +174,10 @@ class USBPrinterManager extends PrinterManager {
   }
 
   @override
-  Future<ConnectionResponse> write(List<int> data, {bool isDisconnect = true}) async{
+  Future<ConnectionResponse> write(List<int> data,
+      {bool isDisconnect = true}) async {
     if (Platform.isWindows) {
-      int hPrinter;
+      int? hPrinter;
       int dwCount;
       int dwJob;
       final phPrinter = calloc<HANDLE>();
@@ -186,11 +189,10 @@ class USBPrinterManager extends PrinterManager {
         ..ref.pOutputFile = nullptr
         ..ref.pDatatype = pDataType;
 
-      final szPrinterName = _printer.name.toNativeUtf16();
+      final szPrinterName = _printer!.name!.toNativeUtf16();
       final lpData = data.toUint8();
 
       try {
-
         if (!this.isConnected) {
           if (OpenPrinter(szPrinterName, phPrinter, nullptr) == FALSE) {
             this.isConnected = false;
@@ -202,7 +204,7 @@ class USBPrinterManager extends PrinterManager {
         }
 
         // Inform the spooler the document is beginning.
-        dwJob = StartDocPrinter(hPrinter, 1, docInfo);
+        dwJob = StartDocPrinter(hPrinter!, 1, docInfo);
         if (dwJob == 0) {
           ClosePrinter(hPrinter);
           return ConnectionResponse.printInProgress;
@@ -244,7 +246,8 @@ class USBPrinterManager extends PrinterManager {
         return ConnectionResponse.success;
       } catch (e) {
         print("Windows打印机错误 $e");
-      }finally {
+        return ConnectionResponse.timeout;
+      } finally {
         free(phPrinter);
         free(pDocName);
         free(pDataType);
@@ -253,12 +256,14 @@ class USBPrinterManager extends PrinterManager {
         free(szPrinterName);
         free(lpData);
       }
-    }else{
+    } else {
       if (!this.isConnected) {
-        await connect(_printer);
+        await connect(_printer!);
       }
 
-      await QuickUsb.bulkTransferOut(_endpoint, Uint8List.fromList(data), timeout: 6000);
+      await QuickUsb.bulkTransferOut(_endpoint!, Uint8List.fromList(data),
+          timeout: 6000);
+      return ConnectionResponse.success;
     }
   }
 }
@@ -271,4 +276,3 @@ extension IntParsing on List<int> {
     return result;
   }
 }
-

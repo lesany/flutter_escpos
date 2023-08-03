@@ -22,7 +22,7 @@ class ZPLPrinter {
   // todo 如果记录一个高度值，是否更加方便计算？？？
 
   // 点密度
-  int ratio;
+  int? ratio;
 
   /**
    * 打印机初始化
@@ -53,8 +53,8 @@ class ZPLPrinter {
     int speed = 3,
   }) async {
     ratio = printerRatio; // 全部保存，计算是需要用到
-    _commandString += '^CI28\n^PW${width * ratio}\n^LL${height * ratio}\n' +
-        '^PR$speed\n^MD$density\n^LH${origin.dx * ratio},${origin.dy * ratio}\n';
+    _commandString += '^CI28\n^PW${width * ratio!}\n^LL${height * ratio!}\n' +
+        '^PR$speed\n^MD$density\n^LH${origin.dx * ratio!},${origin.dy * ratio!}\n';
     _bytes += _commandString.codeUnits;
   }
 
@@ -79,7 +79,7 @@ class ZPLPrinter {
     int x,
     int y,
     String text, {
-    TextStyles style,
+    TextStyles? style,
   }) async {
     if (style == null) {
       style = TextStyles();
@@ -103,7 +103,7 @@ class ZPLPrinter {
         break;
     }
 
-    String textInfo = '^FO${x * ratio},${y * ratio}' +
+    String textInfo = '^FO${x * ratio!},${y * ratio!}' +
         '^A${style.fontFamily},$turnChar,${style.scaleY},${style.scaleX}^FD$text^FS\n';
     _commandString += textInfo;
     List<int> texHex = utf8.encode(textInfo);
@@ -130,8 +130,8 @@ class ZPLPrinter {
     String color = 'B',
     int radius = 0,
   }) async {
-    _commandString += '^FO${x * ratio},${y * ratio}' +
-        '^GB${width * ratio},${height * ratio},${thickness},$color,$radius^FS\n';
+    _commandString += '^FO${x * ratio!},${y * ratio!}' +
+        '^GB${width * ratio!},${height * ratio!},${thickness},$color,$radius^FS\n';
     _bytes += _commandString.codeUnits;
   }
 
@@ -168,7 +168,7 @@ class ZPLPrinter {
     String quality = 'Q',
     int mask = 7,
   }) async {
-    _commandString += '^FO${x * ratio},${y * ratio}' +
+    _commandString += '^FO${x * ratio!},${y * ratio!}' +
         '^BQ$turn,$model,$scale,$quality,$mask\n';
     String text = '^FDMM,A$content^FS\n';
     _commandString += text;
@@ -233,7 +233,7 @@ class ZPLPrinter {
         break;
     }
 
-    String command = '^FO${x * ratio},${y * ratio}$_pre\n^FDMM,A$content^FS\n';
+    String command = '^FO${x * ratio!},${y * ratio!}$_pre\n^FDMM,A$content^FS\n';
     _commandString += command;
     _bytes += _commandString.codeUnits;
   }
@@ -256,7 +256,7 @@ class ZPLPrinter {
       final _total = _widthBytes * image.height;
       final _hexCode = HEX.encode(imageBytes);
       final _asciiCode = String.fromCharCodes(HEX.decode(_hexCode));
-      _commandString += '^FO${x * ratio},${y * ratio}' +
+      _commandString += '^FO${x * ratio!},${y * ratio!}' +
           '^GF$compression,$_total,$_total,$_widthBytes,$_asciiCode^FS\n';
       _bytes += _commandString.codeUnits;
     });

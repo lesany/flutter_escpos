@@ -7,16 +7,16 @@ import '../enums/connection_type.dart';
 /// Description:
 
 class POSPrinter {
-  String id;
-  String name;
-  String address;
-  int port;
-  int deviceId;
-  int vendorId;
-  int productId;
+  String? id;
+  String? name;
+  String? address;
+  int? port;
+  int? deviceId;
+  int? vendorId;
+  int? productId;
   bool connected;
   int type;
-  ConnectionType connectionType;
+  ConnectionType? connectionType;
 
   factory POSPrinter.instance() => POSPrinter();
 
