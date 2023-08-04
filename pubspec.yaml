@@ -11,10 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
   win32: ^2.4.1
-#  ffi: ^2.0.1
+  #  ffi: ^2.0.1
   quick_usb:
-    git: https://codeup.aliyun.com/5f402b26769820a3e8181e81/flutter/packages/quick_usb.git
-#    path: ../quick_usb
+    git: https://github.com/lesany/quick_usb.git
   esc_pos_utils: ^1.1.0
   fast_gbk: ^1.0.0
   # flutter_libserialport: ^0.2.2
