@@ -36,21 +36,23 @@ class _MyAppState extends State<MyApp> {
   List<DropdownMenuItem<Object>> deviceWidget = [];
 
   @override
-  void initState() async {
-    usbAdapter =  USBPrinterManager.instance;
-    // networkAdapter = NetworkAdapter.instance;
-    networkPrinterManager = NetworkPrinterManager.instance;
-    // serialPortAdapter = SerialPortAdapter.instance;
+  void initState()  {
+    // usbAdapter =  USBPrinterManager.instance;
+    // // networkAdapter = NetworkAdapter.instance;
+    // networkPrinterManager = NetworkPrinterManager.instance;
+    // // serialPortAdapter = SerialPortAdapter.instance;
     super.initState();
-    await getCapabilityProfile();
-    printScriptUtil = PrintScriptUtil(PaperSize.mm80, capabilityProfile);
-    deviceFuture = getDeviceList();
+    // await getCapabilityProfile();
+    // printScriptUtil = PrintScriptUtil(PaperSize.mm80, capabilityProfile);
+    // deviceFuture = getDeviceList();
 
 
     // await QuickUsb.init();
     // var deviceList = await QuickUsb.getDeviceList();
     //
     // print(deviceList.toString());
+
+    PrinterService().init();
   }
 
   getCapabilityProfile() async {
@@ -236,182 +238,182 @@ class _MyAppState extends State<MyApp> {
                     ),
                   ],
                 ),
-                // Center(
-                //   child: Column(
-                //     children: [
-                //       const SizedBox(height: 50),
-                //       Row(
-                //         mainAxisAlignment: MainAxisAlignment.center,
-                //         children: [
-                //           const Text("select printer: "),
-                //           Container(
-                //             width: 400,
-                //             padding: const EdgeInsets.symmetric(horizontal: 10),
-                //             decoration: BoxDecoration(
-                //                 border:
-                //                     Border.all(color: Colors.black38, width: 1),
-                //                 borderRadius: BorderRadius.circular(8.0)),
-                //             child: DropdownButton(
-                //               items: deviceWidget,
-                //               icon: const Icon(Icons.print),
-                //               hint: const Text("select printer"),
-                //               isExpanded: true,
-                //               value: _radioGroupA == 0 ? device : serialPort,
-                //               underline: Container(color: Colors.black),
-                //               onChanged: (newDevice) {
-                //                 setState(() {
-                //                   if (_radioGroupA == 0) {
-                //                     device = newDevice;
-                //                   } else if (_radioGroupA == 1) {
-                //                     serialPort = newDevice;
-                //                   }
-                //                 });
-                //               },
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //       const SizedBox(height: 30),
-                //       Row(
-                //         mainAxisAlignment: MainAxisAlignment.center,
-                //         children: [
-                //           ElevatedButton(
-                //               onPressed: () async {
-                //                 if (_radioGroupA == 0) {
-                //                   await printer?.connect(device!);
-                //                 } else if (_radioGroupA == 1) {
-                //                   // await SerialPortAdapter.connect(serialPort, baudRate: "9600");
-                //                 }
-                //               },
-                //               style: ButtonStyle(
-                //                 padding: MaterialStateProperty.all(
-                //                     const EdgeInsets.symmetric(
-                //                         horizontal: 8, vertical: 12)),
-                //                 minimumSize: MaterialStateProperty.all(
-                //                     const Size(140, 45)),
-                //                 backgroundColor:
-                //                     MaterialStateProperty.all(Colors.green),
-                //               ),
-                //               child: _radioGroupA == 0
-                //                   ? const Text("Open USB printer")
-                //                   : const Text("Open serial printer")),
-                //           const SizedBox(width: 20),
-                //           ElevatedButton(
-                //             onPressed: () async {
-                //               if (_radioGroupA == 0) {
-                //                 await printer?.disconnect();
-                //               } else if (_radioGroupA == 1) {
-                //                 // await SerialPortAdapter.disconnect();
-                //               }
-                //             },
-                //             style: ButtonStyle(
-                //               padding: MaterialStateProperty.all(
-                //                   const EdgeInsets.symmetric(
-                //                       horizontal: 8, vertical: 12)),
-                //               minimumSize: MaterialStateProperty.all(
-                //                   const Size(140, 45)),
-                //               backgroundColor:
-                //                   MaterialStateProperty.all(Colors.redAccent),
-                //             ),
-                //             child: _radioGroupA == 0
-                //                 ? const Text("Close USB printer")
-                //                 : const Text("Close serial printer"),
-                //           ),
-                //           const SizedBox(width: 20),
-                //           Visibility(
-                //             visible: _radioGroupA == 2,
-                //             child: ElevatedButton(
-                //                 onPressed: () async {
-                //                   device = NetworkPrinter(
-                //                       address: "192.168.2.235", port: 9100);
-                //                   await printer?.connect(device!);
-                //                 },
-                //                 style: ButtonStyle(
-                //                   padding: MaterialStateProperty.all(
-                //                       const EdgeInsets.symmetric(
-                //                           horizontal: 8, vertical: 12)),
-                //                   minimumSize: MaterialStateProperty.all(
-                //                       const Size(140, 45)),
-                //                   backgroundColor:
-                //                       MaterialStateProperty.all(Colors.amber),
-                //                 ),
-                //                 child: const Text("Open network printer")),
-                //           ),
-                //         ],
-                //       ),
-                //       const SizedBox(height: 40),
-                //       Row(
-                //         mainAxisAlignment: MainAxisAlignment.center,
-                //         children: [
-                //           ElevatedButton(
-                //               onPressed: () async {
-                //                 try {
-                //                   await printer?.print(await buildText());
-                //                 } catch (e) {
-                //                   print("打印报错");
-                //                 } finally {
-                //                   printer!.disconnect();
-                //                 }
-                //               },
-                //               style: ButtonStyle(
-                //                 padding: MaterialStateProperty.all(
-                //                     const EdgeInsets.symmetric(
-                //                         horizontal: 8, vertical: 12)),
-                //                 minimumSize: MaterialStateProperty.all(
-                //                     const Size(140, 60)),
-                //                 backgroundColor: MaterialStateProperty.all(
-                //                     Colors.blueAccent),
-                //               ),
-                //               child: const Text("print ESC")),
-                //           const SizedBox(width: 20),
-                //           ElevatedButton(
-                //               onPressed: () async {
-                //                 final ByteData qrData =
-                //                     await rootBundle.load('assets/qrcode.bmp');
-                //                 final Uint8List qrBytes =
-                //                     qrData.buffer.asUint8List();
-                //                 final gImage.Image? qrImage =
-                //                     gImage.decodeImage(qrBytes);
-                //
-                //                 TscPrinter(usbAdapter)
-                //                   // ..Download("qrcode.bmp", qrImage)
-                //                   ..setup(100, 100, 4, 12, 1, 2, 0)
-                //                   ..clearBuffer()
-                //                   ..text(
-                //                       64, 40, "TSS24.BF2", 0, 4, 4, "固定资产标识卡")
-                //                   ..bar(0, 146, 800, 4)
-                //                   ..text(
-                //                       10, 166, "TSS24.BF2", 0, 2, 2, "资产名称：显示器")
-                //                   ..text(10, 234, "TSS24.BF2", 0, 2, 2,
-                //                       "资产编号：WL456765456765456")
-                //                   ..text(10, 302, "TSS24.BF2", 0, 2, 2,
-                //                       "使用部门：网络系统研发中心")
-                //                   ..text(10, 370, "TSS24.BF2", 0, 2, 2,
-                //                       "产品规格：PHILIPS-227H")
-                //                   ..text(10, 438, "TSS24.BF2", 0, 2, 2,
-                //                       "领用日期：2019-3-28")
-                //                   ..barcode(10, 506, "128", 100, 1, 0, 3, 3,
-                //                       "WL5555123456789")
-                //                   ..qrcode(525, 490, "H", 5, "A", 0, "M2", "S7",
-                //                       "http://www.freshfans.cn")
-                //                   ..bmp(0, 600, "qrcode.bmp")
-                //                   ..printlabel(1, 1);
-                //               },
-                //               style: ButtonStyle(
-                //                 padding: MaterialStateProperty.all(
-                //                     const EdgeInsets.symmetric(
-                //                         horizontal: 8, vertical: 12)),
-                //                 minimumSize: MaterialStateProperty.all(
-                //                     const Size(140, 60)),
-                //                 backgroundColor:
-                //                     MaterialStateProperty.all(Colors.pink),
-                //               ),
-                //               child: const Text("print TSC"))
-                //         ],
-                //       )
-                //     ],
-                //   ),
-                // )
+                Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 50),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("select printer: "),
+                          Container(
+                            width: 400,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.black38, width: 1),
+                                borderRadius: BorderRadius.circular(8.0)),
+                            child: DropdownButton(
+                              items: deviceWidget,
+                              icon: const Icon(Icons.print),
+                              hint: const Text("select printer"),
+                              isExpanded: true,
+                              value: _radioGroupA == 0 ? device : serialPort,
+                              underline: Container(color: Colors.black),
+                              onChanged: (newDevice) {
+                                setState(() {
+                                  // if (_radioGroupA == 0) {
+                                  //   device = newDevice;
+                                  // } else if (_radioGroupA == 1) {
+                                  //   serialPort = newDevice;
+                                  // }
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                              onPressed: () async {
+                                if (_radioGroupA == 0) {
+                                  await printer?.connect(device!);
+                                } else if (_radioGroupA == 1) {
+                                  // await SerialPortAdapter.connect(serialPort, baudRate: "9600");
+                                }
+                              },
+                              style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                    const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 12)),
+                                minimumSize: MaterialStateProperty.all(
+                                    const Size(140, 45)),
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.green),
+                              ),
+                              child: _radioGroupA == 0
+                                  ? const Text("Open USB printer")
+                                  : const Text("Open serial printer")),
+                          const SizedBox(width: 20),
+                          ElevatedButton(
+                            onPressed: () async {
+                              if (_radioGroupA == 0) {
+                                await printer?.disconnect();
+                              } else if (_radioGroupA == 1) {
+                                // await SerialPortAdapter.disconnect();
+                              }
+                            },
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                  const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 12)),
+                              minimumSize: MaterialStateProperty.all(
+                                  const Size(140, 45)),
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.redAccent),
+                            ),
+                            child: _radioGroupA == 0
+                                ? const Text("Close USB printer")
+                                : const Text("Close serial printer"),
+                          ),
+                          const SizedBox(width: 20),
+                          Visibility(
+                            visible: _radioGroupA == 2,
+                            child: ElevatedButton(
+                                onPressed: () async {
+                                  device = NetworkPrinter(
+                                      address: "192.168.2.235", port: 9100);
+                                  await printer?.connect(device!);
+                                },
+                                style: ButtonStyle(
+                                  padding: MaterialStateProperty.all(
+                                      const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 12)),
+                                  minimumSize: MaterialStateProperty.all(
+                                      const Size(140, 45)),
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.amber),
+                                ),
+                                child: const Text("Open network printer")),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 40),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                              onPressed: () async {
+                                try {
+                                  await printer?.print(await buildText());
+                                } catch (e) {
+                                  print("打印报错");
+                                } finally {
+                                  printer!.disconnect();
+                                }
+                              },
+                              style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                    const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 12)),
+                                minimumSize: MaterialStateProperty.all(
+                                    const Size(140, 60)),
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.blueAccent),
+                              ),
+                              child: const Text("print ESC")),
+                          const SizedBox(width: 20),
+                          ElevatedButton(
+                              onPressed: () async {
+                                final ByteData qrData =
+                                    await rootBundle.load('assets/qrcode.bmp');
+                                final Uint8List qrBytes =
+                                    qrData.buffer.asUint8List();
+                                final gImage.Image? qrImage =
+                                    gImage.decodeImage(qrBytes);
+
+                                // TscPrinter(usbAdapter)
+                                //   // ..Download("qrcode.bmp", qrImage)
+                                //   ..setup(100, 100, 4, 12, 1, 2, 0)
+                                //   ..clearBuffer()
+                                //   ..text(
+                                //       64, 40, "TSS24.BF2", 0, 4, 4, "固定资产标识卡")
+                                //   ..bar(0, 146, 800, 4)
+                                //   ..text(
+                                //       10, 166, "TSS24.BF2", 0, 2, 2, "资产名称：显示器")
+                                //   ..text(10, 234, "TSS24.BF2", 0, 2, 2,
+                                //       "资产编号：WL456765456765456")
+                                //   ..text(10, 302, "TSS24.BF2", 0, 2, 2,
+                                //       "使用部门：网络系统研发中心")
+                                //   ..text(10, 370, "TSS24.BF2", 0, 2, 2,
+                                //       "产品规格：PHILIPS-227H")
+                                //   ..text(10, 438, "TSS24.BF2", 0, 2, 2,
+                                //       "领用日期：2019-3-28")
+                                //   ..barcode(10, 506, "128", 100, 1, 0, 3, 3,
+                                //       "WL5555123456789")
+                                //   ..qrcode(525, 490, "H", 5, "A", 0, "M2", "S7",
+                                //       "http://www.freshfans.cn")
+                                //   ..bmp(0, 600, "qrcode.bmp")
+                                //   ..printlabel(1, 1);
+                              },
+                              style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                    const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 12)),
+                                minimumSize: MaterialStateProperty.all(
+                                    const Size(140, 60)),
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.pink),
+                              ),
+                              child: const Text("print TSC"))
+                        ],
+                      )
+                    ],
+                  ),
+                )
               ],
             ),
           );
@@ -420,3 +422,79 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+
+
+
+class PrinterService {
+  PrintScriptUtil? printScriptUtil;
+  Printer? printer;
+  USBPrinterManager? usbAdapter;
+  UsbAdapter? usbAdapter1;
+  NetworkPrinterManager? networkPrinterManager;
+
+  // SerialPortAdapter serialPortAdapter;
+  late CapabilityProfile capabilityProfile;
+  POSPrinter? device;
+  List<POSPrinter> usbList = [];
+  List<String> serialPortList = [];
+  String serialPort = '';
+  Future<String>? deviceFuture;
+
+  //
+  // print() async {
+  //   // printerManager.discovery(type: PrinterType.usb,isBle:false).listen((event) {
+  //   //   UI().showToast(title: event.vendorId.toString());
+  //   //   // debugPrint(event);
+  //   // });
+  //
+  //   await QuickUsb.init();
+  //   var deviceList = await QuickUsb.getDeviceList();
+  //
+  //   debugPrint(deviceList.toString());
+  //   debugPrint(deviceList.runtimeType.toString());
+  //
+  //   //  deviceList.forEach((usbDevice) async {
+  //   //   var info = await QuickUsb.getDeviceDescription(usbDevice);
+  //   //   debugPrint(info.toString());
+  //   // });
+  //   // QuickUsb.requestPermission(usbDevice)
+  //
+  //
+  //   var descriptions = await QuickUsb.getDevicesWithDescription();
+  //   // var deviceList1 = descriptions.map((e) => e.device).toList();
+  //   debugPrint('descriptions $descriptions');
+  //
+  //
+  //
+  //   // UI().showToast(title: deviceList.toString());
+  // }
+
+  Future<String> getDeviceList() async {
+    print("这里是否执行了");
+    printer = Printer(usbAdapter);
+    final usbList = await printer?.findPrinter();
+
+    print("USB列表： " + usbList!.length.toString());
+
+    // device = usbList[0];
+
+
+    return "Loaded Successfully";
+  }
+
+  getCapabilityProfile() async {
+    capabilityProfile = await CapabilityProfile.load();
+  }
+
+  init() async {
+    usbAdapter = USBPrinterManager.instance;
+    // networkAdapter = NetworkAdapter.instance;
+    networkPrinterManager = NetworkPrinterManager.instance;
+    // serialPortAdapter = SerialPortAdapter.instance;
+    await getCapabilityProfile();
+    printScriptUtil = PrintScriptUtil(PaperSize.mm80, capabilityProfile);
+    deviceFuture = getDeviceList();
+  }
+}
+
