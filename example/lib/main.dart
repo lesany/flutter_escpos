@@ -1,8 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:esc_pos_utils/esc_pos_utils.dart';
+
 import 'package:flutter/services.dart';
+import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
 import 'package:image/image.dart' as gImage;
 import 'package:flutter_escpos/flutter_escpos.dart';
 import 'package:quick_usb/quick_usb.dart';
@@ -164,7 +165,7 @@ class _MyAppState extends State<MyApp> {
         ..text("The language of eternal question.")
         ..text("What language is thy answer, O sky?")
         ..text("The language of eternal silence.")
-        ..qrcode("escpos printer test", size: QRSize.Size6)
+        ..qrcode("escpos printer test", size: QRSize.size6)
         ..cut();
       return printScriptUtil!.bytes!;
     } catch (e) {

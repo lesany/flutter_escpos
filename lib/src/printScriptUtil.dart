@@ -1,6 +1,6 @@
 import 'dart:typed_data';
+import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
 import 'package:image/image.dart';
-import 'package:esc_pos_utils/esc_pos_utils.dart';
 
 /// FileName: printScriptUtil
 /// Author: zhoufan
@@ -142,7 +142,7 @@ class PrintScriptUtil {
   PrintScriptUtil qrcode(
     String text, {
     PosAlign align = PosAlign.center,
-    QRSize size = QRSize.Size4,
+    QRSize size = QRSize.size4,
     QRCorrection cor = QRCorrection.L,
   }) {
     _bytes =_bytes!+_generator!.qrcode(text, align: align, size: size, cor: cor);
